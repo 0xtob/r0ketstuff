@@ -66,8 +66,8 @@ void ram(void)
 uint8_t recv_msg(unsigned char **msg)
 {
     nrf_config_set(&config);
-    int n = nrf_rcv_pkt_time(100,32,recvbuf);
-    getInputWaitTimeout(100);
+    int n = nrf_rcv_pkt_time(10,32,recvbuf);
+    //getInputWaitTimeout(100);
     if(n != 32)
         return 0;
     *msg = recvbuf;
