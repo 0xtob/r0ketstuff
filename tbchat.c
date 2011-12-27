@@ -6,6 +6,8 @@
 #include "basic/basic.h"
 #include "basic/config.h"
 
+#include "filesystem/ff.h"
+
 #include "funk/nrf24l01p.h"
 #include "funk/rftransfer.h"
 
@@ -13,6 +15,7 @@
 #include "lcd/print.h"
 
 #include "usetable.h"
+
 
 /*Global Communication Config*/
 uint8_t mac[5] = {1,2,3,5,5};
@@ -32,15 +35,17 @@ uint8_t recv_msg(unsigned char **msg);
 
 void ram(void)
 {
+    FIL f;
+    f_open(&f, "wurst", 0);
     unsigned char *msg;
-    uint8_t key;
+    uint8_t key = BTN_NONE;;
 
     lcdClear();
     lcdPrintln("tbchat ready.");
-    lcdPrintln("press any direction to send a message");
+    lcdPrintln("press any\ndirection to\nsend a message");
     lcdRefresh();
 
-    while(1) {
+    while(key != BTN_ENTER) {
         if(recv_msg(&msg)) {
             lcdPrint("<-");
             lcdPrintln((char*)msg);
