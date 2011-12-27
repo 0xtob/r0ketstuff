@@ -42,17 +42,22 @@ void ram(void)
 
     while(1) {
         if(recv_msg(&msg)) {
+            lcdPrint("<-");
             lcdPrintln((char*)msg);
         }
         key = getInput();
         if(key == BTN_RIGHT) {
             send_msg("right!");
+            lcdPrintln("->right");
         } else if(key == BTN_LEFT) {
             send_msg("left!");
+            lcdPrintln("->left");
         } else if(key == BTN_UP) {
             send_msg("up!");
+            lcdPrintln("->up");
         } else if(key == BTN_DOWN) {
             send_msg("down!");
+            lcdPrintln("->down");
         }
         lcdRefresh();
     }
@@ -61,7 +66,7 @@ void ram(void)
 uint8_t recv_msg(unsigned char **msg)
 {
     nrf_config_set(&config);
-    int n = nrf_rcv_pkt_time(100,32,recvbuf);
+    int n = nrf_rcv_pkt_time(10,32,recvbuf);
     if(n != 32)
         return 0;
     *msg = recvbuf;
