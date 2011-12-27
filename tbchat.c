@@ -34,6 +34,12 @@ void ram(void)
 {
     unsigned char *msg;
     uint8_t key;
+
+    lcdClear();
+    lcdPrintln("tbchat ready.");
+    lcdPrintln("press any direction to send a message");
+    lcdRefresh();
+
     while(1) {
         if(recv_msg(&msg)) {
             lcdPrintln((char*)msg);
@@ -48,6 +54,7 @@ void ram(void)
         } else if(key == BTN_DOWN) {
             send_msg("down!");
         }
+        lcdRefresh();
     }
 }
 
