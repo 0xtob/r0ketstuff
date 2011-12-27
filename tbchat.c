@@ -42,17 +42,22 @@ void ram(void)
 
     while(1) {
         if(recv_msg(&msg)) {
+            lcdPrint("<-");
             lcdPrintln((char*)msg);
         }
         key = getInput();
         if(key == BTN_RIGHT) {
             send_msg("right!");
+            lcdPrintln("->right");
         } else if(key == BTN_LEFT) {
             send_msg("left!");
+            lcdPrintln("->left");
         } else if(key == BTN_UP) {
             send_msg("up!");
+            lcdPrintln("->up");
         } else if(key == BTN_DOWN) {
             send_msg("down!");
+            lcdPrintln("->down");
         }
         lcdRefresh();
     }
