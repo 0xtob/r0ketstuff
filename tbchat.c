@@ -6,6 +6,7 @@
 #include "basic/basic.h"
 #include "basic/config.h"
 
+#include "filesystem/ff.h"
 
 #include "funk/nrf24l01p.h"
 #include "funk/rftransfer.h"
@@ -15,6 +16,7 @@
 #include "lcd/backlight.h"
 
 #include "usetable.h"
+
 
 /*Global Communication Config*/
 uint8_t mac[5] = {1,2,3,5,5};
@@ -45,8 +47,10 @@ uint8_t ceil(const uint8_t n, const uint8_t d);
 
 void ram(void)
 {
+    FIL f;
+    f_open(&f, "wurst", 0);
     unsigned char *msg;
-    uint8_t key;
+    uint8_t key = BTN_NONE;;
 
     lcdClear();
     lcdPrintln("OK r0ket ready.");
@@ -71,7 +75,7 @@ void ram(void)
         } 
     }
 
-    while(1) {
+    while(key != BTN_ENTER) {
         if(recv_msg(&msg)) {
             lcdPrint("<-");
             lcdPrintln((char*)msg);
@@ -124,7 +128,6 @@ uint8_t recv_msg(unsigned char **msg)
 {
     nrf_config_set(&config);
     int n = nrf_rcv_pkt_time(10,32,recvbuf);
-    //getInputWaitTimeout(100);
     if(n != 32)
         return 0;
     *msg = recvbuf;
