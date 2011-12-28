@@ -144,7 +144,7 @@ void wrapPacket(const unsigned char const *answers, const uint8_t nAnswers, char
     uint8_t offset = 0;
     packet[offset] = 0xD;
     offset++;
-    uint8_t nickLength = strlen(nickname);
+    const uint8_t nickLength = 16;
     for (uint8_t i=0; i<nickLength; ++i) {
         packet[i+offset] = nickname[i];
     }
