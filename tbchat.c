@@ -50,7 +50,7 @@ void ram(void)
     lcdPrintln("OK r0ket ready.");
     lcdPrintln("Press any button.");
     lcdRefresh();
-    key = getInputWait();
+    uint8_t key = getInputWait();
     getInputWaitRelease();
     
     uint8_t nQuestions = 3;
@@ -69,6 +69,7 @@ void ram(void)
         } 
     }
 
+    unsigned char *msg;
     while(key != BTN_ENTER) {
         if(recv_msg(&msg)) {
             lcdPrint("<-");
