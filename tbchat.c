@@ -50,7 +50,7 @@ void ram(void)
     FIL f;
     f_open(&f, "wurst", 0);
     unsigned char *msg;
-    uint8_t key = BTN_NONE;;
+    uint8_t key = BTN_NONE;
 
     lcdClear();
     lcdPrintln("OK r0ket ready.");
@@ -62,6 +62,7 @@ void ram(void)
     uint8_t nQuestions = 3;
     struct Question q[nQuestions];
     unsigned char answers[nQuestions];
+    memset(answers, nQuestions, 0); // size in bytes
     initQuestions(q);
     
     for (uint8_t i = 0; i<nQuestions; ++i) {
@@ -72,7 +73,7 @@ void ram(void)
             answers[i] = 1;
         } else if(key == BTN_DOWN) {
             answers[i] = 0;
-        } 
+        }
     }
 
     while(key != BTN_ENTER) {
@@ -96,6 +97,17 @@ void ram(void)
         }
         lcdRefresh();
     }
+}
+
+// a1 and a2 are 
+uint8_t match(const unsigned char const * a1, const unsigned char const * a2, const uint8_t n) 
+{
+    uint8_t score = 0;
+    for (uint8_t i=0; i<n; ++i) {
+        if (a1[i]==a2[i]) 
+            score++;
+    }
+    return score;
 }
 
 uint8_t ceil(const uint8_t n, const uint8_t d) 
