@@ -13,10 +13,8 @@
 
 #include "lcd/render.h"
 #include "lcd/print.h"
-#include "lcd/backlight.h"
 
 #include "usetable.h"
-
 
 /*Global Communication Config*/
 uint8_t mac[5] = {1,2,3,5,5};
@@ -40,6 +38,7 @@ struct Question {
 
 uint8_t recv_msg(unsigned char **msg);
 void send_msg(unsigned char *msg);
+int readTextFile(char * filename, char * data, int len);
 void initQuestions(struct Question* const questions);
 void showQuestion(const struct Question const * q, const uint8_t idx);
 void printWrap(const char const * s, uint8_t len);
@@ -47,16 +46,19 @@ uint8_t ceil(const uint8_t n, const uint8_t d);
 
 void ram(void)
 {
+<<<<<<< HEAD
     FIL f;
     f_open(&f, "wurst", 0);
     unsigned char *msg;
     uint8_t key = BTN_NONE;
 
+=======
+>>>>>>> f10d3afd99be7b634123cdf6798aa1167802e295
     lcdClear();
     lcdPrintln("OK r0ket ready.");
     lcdPrintln("Press any button.");
     lcdRefresh();
-    key = getInputWait();
+    uint8_t key = getInputWait();
     getInputWaitRelease();
     
     uint8_t nQuestions = 3;
@@ -76,6 +78,7 @@ void ram(void)
         }
     }
 
+    unsigned char *msg;
     while(key != BTN_ENTER) {
         if(recv_msg(&msg)) {
             lcdPrint("<-");
@@ -99,6 +102,7 @@ void ram(void)
     }
 }
 
+<<<<<<< HEAD
 // a1 and a2 are 
 uint8_t match(const unsigned char const * a1, const unsigned char const * a2, const uint8_t n) 
 {
@@ -109,6 +113,17 @@ uint8_t match(const unsigned char const * a1, const unsigned char const * a2, co
     }
     return score;
 }
+=======
+// Copy from filesystem/util.c since the function is not exported
+int readTextFile(char * filename, char * data, int len){
+    UINT readbytes;
+
+    readbytes=readFile(filename,data,len-1);
+    if(len>=0)
+        data[readbytes]=0;
+    return readbytes;
+};
+>>>>>>> f10d3afd99be7b634123cdf6798aa1167802e295
 
 uint8_t ceil(const uint8_t n, const uint8_t d) 
 {
@@ -134,7 +149,6 @@ void printWrap(const char const * s, uint8_t len)
         lcdPrintln(substr);
     }
 }
-
 
 uint8_t recv_msg(unsigned char **msg)
 {
@@ -189,34 +203,3 @@ void showQuestion(const struct Question const * q, const uint8_t idx)
     lcdRefresh();
 }
 
-/*
-uint32_t max(const uint32_t a, const uint32_t b) 
-{
-    if (a>b) 
-        return a; 
-    return b;
-}
-     
-uint32_t min(const uint32_t a, const uint32_t b) 
-{
-    if (a<b) 
-        return a; 
-    return b;
-}
-
-void brighter(void)
-{
-    uint32_t brightness = backlightGetBrightness();
-    if (brightness < 100) {
-        backlightSetBrightness(max(brightness + 20,100));
-    }
-}
-
-void darker(void) 
-{
-    uint32_t brightness = backlightGetBrightness();
-    if (brightness > 0) {
-        backlightSetBrightness(min(brightness - 10,0));
-    }
-}
-*/
