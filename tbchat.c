@@ -35,11 +35,6 @@ uint8_t recv_msg(unsigned char **msg);
 
 void ram(void)
 {
-    FIL f;
-    f_open(&f, "wurst", 0);
-    unsigned char *msg;
-    uint8_t key = BTN_NONE;;
-
     lcdClear();
     lcdPrintln("tbchat ready.");
     lcdPrintln("press any\ndirection to\nsend a message");
