@@ -97,6 +97,23 @@ void ram(void)
     }
 }
 
+void wrapPacket(const unsigned char const *answers, const uint8_t nAnswers, char* packet)
+{
+    const uint8_t packetLength = 32;
+    uint8_t offset = 0;
+    packet[offset] = 0xD;
+    offset++;
+    uint8_t nickLength = strlen(nickname);
+    for (uint8_t i=0; i<nickLength; ++i) {
+        packet[i+offset] = nickname[i];
+    }
+    offset += nickLength;
+    for (uint8_t i=0; i<nAnswers; ++i) {
+        packet[i+offset] = answers[i];
+    }
+    
+}
+
 void askQuestions(const struct Question const *q, uint8_t nQuestions,
                   unsigned char *answers)
 {
