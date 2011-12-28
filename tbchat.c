@@ -16,7 +16,6 @@
 
 #include "usetable.h"
 
-
 /*Global Communication Config*/
 uint8_t mac[5] = {1,2,3,5,5};
 struct NRF_CFG config =
@@ -32,6 +31,8 @@ unsigned char recvbuf[32];
 unsigned char sendbuf[32];
 
 uint8_t recv_msg(unsigned char **msg);
+void send_msg(unsigned char *msg);
+int readTextFile(char * filename, char * data, int len);
 
 void ram(void)
 {
@@ -62,6 +63,16 @@ void ram(void)
         lcdRefresh();
     }
 }
+
+// Copy from filesystem/util.c since the function is not exported
+int readTextFile(char * filename, char * data, int len){
+    UINT readbytes;
+
+    readbytes=readFile(filename,data,len-1);
+    if(len>=0)
+        data[readbytes]=0;
+    return readbytes;
+};
 
 uint8_t recv_msg(unsigned char **msg)
 {
