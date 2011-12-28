@@ -43,9 +43,12 @@ void initQuestions(struct Question* const questions);
 void showQuestion(const struct Question const * q, const uint8_t idx);
 void printWrap(const char const * s, uint8_t len);
 uint8_t ceil(const uint8_t n, const uint8_t d);
-
+void askQuestions(const struct Question const *q, uint8_t nQuestions,
+                  unsigned char *answers);
 void ram(void)
 {
+    char ANSWERFILE[] = "okr0ket.prf";
+
     lcdClear();
     lcdPrintln("OK r0ket ready.");
     lcdPrintln("Press any button.");
@@ -56,21 +59,21 @@ void ram(void)
     uint8_t nQuestions = 3;
     struct Question q[nQuestions];
     unsigned char answers[nQuestions];
-    memset(answers, nQuestions, 0); // size in bytes
-    initQuestions(q);
-    
-    for (uint8_t i = 0; i<nQuestions; ++i) {
-        showQuestion(q,i);
-        key = getInputWait();
-        getInputWaitRelease();
-        if(key == BTN_UP) {
-            answers[i] = 1;
-        } else if(key == BTN_DOWN) {
-            answers[i] = 0;
+
+    if(readFile(ANSWERFILE, (char*)answers, nQuestions) == nQuestions) {
+        lcdPrintln("Answers read.");
+    } else {
+        lcdPrintln("Answers not read.");
+        memset(answers, nQuestions, 0); // size in bytes
+        initQuestions(q);
+        askQuestions(q, nQuestions, answers);
+        if(writeFile(ANSWERFILE, (char*)answers, nQuestions) == -1) {
+            lcdPrintln("Error writing answers!");
         }
     }
 
     unsigned char *msg;
+    key = BTN_NONE;
     while(key != BTN_ENTER) {
         if(recv_msg(&msg)) {
             lcdPrint("<-");
@@ -91,6 +94,22 @@ void ram(void)
             lcdPrintln("->down");
         }
         lcdRefresh();
+    }
+}
+
+void askQuestions(const struct Question const *q, uint8_t nQuestions,
+                  unsigned char *answers)
+{
+    uint8_t key;
+    for (uint8_t i = 0; i<nQuestions; ++i) {
+        showQuestion(q,i);
+        key = getInputWait();
+        getInputWaitRelease();
+        if(key == BTN_UP) {
+            answers[i] = 1;
+        } else if(key == BTN_DOWN) {
+            answers[i] = 0;
+        }
     }
 }
 
@@ -164,7 +183,7 @@ void send_msg(unsigned char *msg)
 void initQuestions(struct Question* const questions)  
 {
     questions[0].text="Do you like men?";
-    questionThank you very much for your feedback.s[0].up="Yes";
+    questions[0].up="Yes";
     questions[0].down="No";
     
     questions[1].text="Favourite Editor?";
