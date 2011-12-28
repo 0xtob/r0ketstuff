@@ -46,6 +46,8 @@ uint8_t ceil(const uint8_t n, const uint8_t d);
 void askQuestions(const struct Question const *q, uint8_t nQuestions,
                   unsigned char *answers);
 void wrapPacket(const unsigned char const *answers, const uint8_t nAnswers, char* packet);
+bool unWrapPacket(unsigned char *answers, const uint8_t nAnswers, char* nick, const char    const * packet);
+uint8_t match(const unsigned char const * a1, const unsigned char const * a2, const    uint8_t n);
 
 void ram(void)
 {
@@ -74,6 +76,42 @@ void ram(void)
         }
     }
 
+    lcdClear();
+    printWrap("Looking for matches", 12);
+    lcdRefresh();
+
+    // Encode message (0xD+nick+answers)
+    char packet_send[32], packet_recv[32];
+    wrapPacket(answers, nQuestions, packet_send);
+
+    key = BTN_NONE;
+    while(key != BTN_ENTER) {
+        // Send the message (of love!)
+        send_msg((unsigned char*)packet_send);
+
+        if(recv_msg((unsigned char**)&packet_recv)) {
+            // decode message
+            char recv_nick[17];
+            unsigned char recv_answers[nQuestions];
+            if(unWrapPacket((unsigned char*)recv_answers, nQuestions,
+                             recv_nick, packet_recv)) {
+                // match against my profile
+                uint8_t score = match(answers, recv_answers, nQuestions);
+
+                // display!
+                lcdPrint(recv_nick);
+                lcdPrint(" ");
+                lcdPrint(IntToStr(100*score/nQuestions, 3, 0));
+                lcdPrintln("%");
+            }
+        }
+        key = getInput();
+        lcdRefresh();
+
+        delayms(100);
+    }
+
+/*
     unsigned char *msg;
     key = BTN_NONE;
     while(key != BTN_ENTER) {
@@ -97,6 +135,7 @@ void ram(void)
         }
         lcdRefresh();
     }
+    */
 }
 
 void wrapPacket(const unsigned char const *answers, const uint8_t nAnswers, char* packet)
@@ -116,7 +155,7 @@ void wrapPacket(const unsigned char const *answers, const uint8_t nAnswers, char
 }
 
 
-bool unWrapPacket(unsigned *answers, const uint8_t nAnswers, char* nick, const char const * packet)
+bool unWrapPacket(unsigned char *answers, const uint8_t nAnswers, char* nick, const char const * packet)
 {
     // const uint8_t packetLength = 32;
     uint8_t offset = 0;
