@@ -45,6 +45,8 @@ void printWrap(const char const * s, uint8_t len);
 uint8_t ceil(const uint8_t n, const uint8_t d);
 void askQuestions(const struct Question const *q, uint8_t nQuestions,
                   unsigned char *answers);
+void wrapPacket(const unsigned char const *answers, const uint8_t nAnswers, char* packet);
+
 void ram(void)
 {
     char ANSWERFILE[] = "okr0ket.prf";
@@ -99,7 +101,7 @@ void ram(void)
 
 void wrapPacket(const unsigned char const *answers, const uint8_t nAnswers, char* packet)
 {
-    const uint8_t packetLength = 32;
+    // const uint8_t packetLength = 32;
     uint8_t offset = 0;
     packet[offset] = 0xD;
     offset++;
@@ -110,8 +112,32 @@ void wrapPacket(const unsigned char const *answers, const uint8_t nAnswers, char
     offset += nickLength;
     for (uint8_t i=0; i<nAnswers; ++i) {
         packet[i+offset] = answers[i];
+    }   
+}
+
+
+bool unWrapPacket(unsigned *answers, const uint8_t nAnswers, char* nick, const char const * packet)
+{
+    // const uint8_t packetLength = 32;
+    uint8_t offset = 0;
+
+    if (packet[offset] == 0xD) 
+        return false;
+    offset++;
+
+    // read nick
+    const uint8_t nickLength = 16;
+    for (uint8_t i=0; i<nickLength; ++i) {
+        nick[i] = packet[i+offset];
     }
+    nick[nickLength+1] = 0;
+    offset += nickLength;
     
+    // read answers
+    for (uint8_t i=0; i<nAnswers; ++i) {
+        answers[i] = packet[i+offset];
+    }
+    return true;
 }
 
 void askQuestions(const struct Question const *q, uint8_t nQuestions,
