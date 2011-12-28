@@ -112,6 +112,17 @@ void askQuestions(const struct Question const *q, uint8_t nQuestions,
     }
 }
 
+// a1 and a2 are 
+uint8_t match(const unsigned char const * a1, const unsigned char const * a2, const uint8_t n) 
+{
+    uint8_t score = 0;
+    for (uint8_t i=0; i<n; ++i) {
+        if (a1[i]==a2[i]) 
+            score++;
+    }
+    return score;
+}
+
 // Copy from filesystem/util.c since the function is not exported
 int readTextFile(char * filename, char * data, int len){
     UINT readbytes;
