@@ -51,6 +51,7 @@ bool unWrapPacket(unsigned char *answers, const uint8_t nAnswers, char* nick, co
 uint8_t match(const unsigned char const * a1, const unsigned char const * a2, const    uint8_t n);
 void printPacket(const char const * packet);
 void showSplashScreen();
+void blinkLed(uint8_t n);
 
 void ram(void)
 {
@@ -100,21 +101,31 @@ void ram(void)
     while(key != BTN_ENTER) {
         // Send the message (of love!)
         send_msg((unsigned char*)packet_send);
+        blinkLed(1); // Blink top left LED
         char* packet_recv;
         if(recv_msg((unsigned char**)&packet_recv)) {
+            //blinkLed(0);
             //printPacket(packet_recv);
             // decode message
             char recv_nick[17];
             unsigned char recv_answers[nQuestions];
             if(unWrapPacket((unsigned char*)recv_answers, nQuestions,
                              recv_nick, packet_recv)) {
+                blinkLed(3); // Packet recvd: Blink top right LED
+
                 // match against my profile
                 uint8_t score = match(answers, recv_answers, nQuestions);
+                uint8_t score_p = 100*score/(nQuestions-2);
+
+                // Blink the red LED if we have a >= 80% match
+                if(score_p >= 80) {
+                    blinkLed(0);
+                }
 
                 // display!
                 lcdPrint(recv_nick);
                 lcdPrint(" ");
-                lcdPrint(IntToStr(100*score/nQuestions, 3, 0));
+                lcdPrint(IntToStr(score_p, 3, 0));
                 lcdPrintln("%");
             } else {
                 //lcdPrintln("cannot read");
@@ -125,6 +136,34 @@ void ram(void)
 
         delayms(100);
     }
+}
+
+// Blinks one of the LEDs above the screen
+// n=0: bottom left (red) 
+// n=1: top left
+// n=2: bottom right
+// n=3: top right
+void blinkLed(uint8_t n)
+{
+    uint32_t portNum, bitPos;
+    if(n==0) {
+        portNum = 0;
+        bitPos = 11;
+    } else if(n==1) {
+        portNum = 1;
+        bitPos = 7;
+    } else if(n==2) {
+        portNum = 1;
+        bitPos = 6;
+    } else if(n==3) {
+        portNum = 1;
+        bitPos = 11;
+    } else {
+        return;
+    }
+    gpioSetValue (portNum, bitPos, 1);
+    delayms(50);
+    gpioSetValue (portNum, bitPos, 0);
 }
 
 void showSplashScreen()
@@ -260,7 +299,7 @@ void printWrap(const char const * s)
 uint8_t recv_msg(unsigned char **msg)
 {
     nrf_config_set(&config);
-    int n = nrf_rcv_pkt_time(100,32,recvbuf);
+    int n = nrf_rcv_pkt_time(400,32,recvbuf);
     if(n != 32)
         return 0;
     *msg = recvbuf;
