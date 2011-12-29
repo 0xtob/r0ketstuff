@@ -59,14 +59,28 @@ void ram(void)
     showSplashScreen();
 
     lcdClear();
-    uint8_t nQuestions = 3;
+    uint8_t nQuestions = 16;
     struct Question q[nQuestions];
     unsigned char answers[nQuestions];
     char answerfile[] = "okr0ket.prf";
+    bool ask_questions = false;
+
     if(readFile(answerfile, (char*)answers, nQuestions) == nQuestions) {
         printWrap("Loaded previous answers.");
+        struct Question loadquestion;
+        unsigned char loadanswer;
+        loadquestion.text = "Load your previous answers?";
+        loadquestion.up = "Yes";
+        loadquestion.down = "No, start over";
+        askQuestions(&loadquestion, 1, &loadanswer);
+        ask_questions = (loadanswer == '0');
+        lcdClear();
+        lcdRefresh();
     } else {
-        lcdPrintln("Answers not read.");
+        ask_questions = true;
+    }
+
+    if(ask_questions) {
         memset(answers, 0, nQuestions); // size in bytes
         initQuestions(q);
         askQuestions(q, nQuestions, answers);
@@ -259,21 +273,69 @@ void send_msg(unsigned char *msg)
 
 void initQuestions(struct Question* const questions)  
 {
-    questions[0].text="Do you like men?";
-    questions[0].up="Yes";
-    questions[0].down="No";
+    questions[0].text="Chromosomes?";
+    questions[0].up  ="XX";
+    questions[0].down="XY";
     
-    questions[1].text="Favourite Editor?";
-    questions[1].up="vi";
-    questions[1].down="emacs";
+    questions[1].text="Gayness?";
+    questions[1].up  ="Low";
+    questions[1].down="High";
 
-    questions[2].text="Schoedingers Cat?";
-    questions[2].up="dead";
-    questions[2].down="alive";
+    questions[2].text="Favorite #?";
+    questions[2].up  ="23";
+    questions[2].down="42";
 
-// Long Hair
-// > 3 Freunde
-// > Grammar Nazi
+    questions[3].text="My data";
+    questions[3].up  ="Encrypted";
+    questions[3].down="Spackeria";
+    
+    questions[4].text="In my lungs";
+    questions[4].up  ="O2";
+    questions[4].down="Nicotine";
+
+    questions[5].text="Spicy Food?";
+    questions[5].up  ="Mildcore";
+    questions[5].down="Pain++";
+
+    questions[6].text="I want";
+    questions[6].up  ="True love";
+    questions[6].down="True sex";
+    
+    questions[7].text="Pet?";
+    questions[7].up  ="Lolcat";
+    questions[7].down="Yo dawg!";
+
+    questions[8].text="My homedir";
+    questions[8].up  ="Messy";
+    questions[8].down="Neat+tidy";
+
+    questions[9].text="Schroedingers cat";
+    questions[9].up  ="Alive!";
+    questions[9].down="Dead!";
+    
+    questions[10].text="German?";
+    questions[10].up  ="Sure!";
+    questions[10].down="Nein!";
+
+    questions[11].text="Star ...";
+    questions[11].up  ="Trek";
+    questions[11].down="Wars";
+
+    questions[12].text="Drink?";
+    questions[12].up  ="Booze";
+    questions[12].down="Own piss";
+
+    questions[13].text="My Editor?";
+    questions[13].up  ="vi";
+    questions[13].down="emacs";
+
+    questions[14].text="In emergency?";
+    questions[14].up  ="Run!";
+    questions[14].down="Observe";
+
+    questions[15].text="Grammar";
+    questions[15].up  ="Nazi";
+    questions[15].down="Hippie";
 }
 
 void showQuestion(const struct Question const * q, const uint8_t idx) 
@@ -281,9 +343,9 @@ void showQuestion(const struct Question const * q, const uint8_t idx)
     lcdClear();
     lcdPrintln("Q: ");
     printWrap(q[idx].text);    
-    lcdPrint("UP: ");
+    lcdPrintln("UP: ");
     printWrap(q[idx].up);    
-    lcdPrint("DOWN: ");
+    lcdPrintln("DOWN: ");
     printWrap(q[idx].down);    
     lcdRefresh();
 }

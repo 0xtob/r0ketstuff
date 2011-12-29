@@ -4,22 +4,46 @@ XX XY
 Gayness
 low, high
 
+Favorite number?
+23, 42
+
 my data
 encrypted, spackeria 
-
-favorite editor
-vi, emacs
-
-schroedingers cat
-alive, dead
-
-star
-trek, wars
 
 smoking
 yes, no
 
 spicy food
 too hot, bring on the pain!
+
+Regardless of future plans, what's more interesting to you right now?
+sex, true love
+
+Favorite pet?
+Lolcat, yo dawg!
+
+Could you date someone who was really messy?
+Yes, No
+
+schroedingers cat
+alive, dead
+
+Do you speak German?
+Yes, No
+
+star
+trek, wars
+
+Rate your self-confidence
+Rather high, rather low
+
+favorite editor
+vi, emacs
+
+Which word describes you better?
+Carefree, Intense
+
+Grammar
+Nazi, Hippie
 
 
