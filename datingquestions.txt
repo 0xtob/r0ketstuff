@@ -20,6 +20,6 @@ smoking
 yes, no
 
 spicy food
-too hot, bring on the pain!
+too hot, pain++!
 
 
