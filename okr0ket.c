@@ -88,7 +88,7 @@ void ram(void)
         send_msg((unsigned char*)packet_send);
         char* packet_recv;
         if(recv_msg((unsigned char**)&packet_recv)) {
-            printPacket(packet_recv);
+            //printPacket(packet_recv);
             // decode message
             char recv_nick[17];
             unsigned char recv_answers[nQuestions];
@@ -194,7 +194,11 @@ void askQuestions(const struct Question const *q, uint8_t nQuestions,
 uint8_t match(const unsigned char const * a1, const unsigned char const * a2, const uint8_t n) 
 {
     uint8_t score = 0;
+    // idx 0: gender, idx 1: gayness
     if (a1[0] == a2[0] && (a1[1] != 1 || a2[1] != 1) ) {
+        return 0;
+    }
+    if (a1[0] != a2[0] && (a1[1] == 1 || a2[1] == 1) ) {
         return 0;
     }
     for (uint8_t i=2; i<n; ++i) {
