@@ -201,7 +201,7 @@ void wrapPacket(const unsigned char const *answers, const uint8_t nAnswers, char
 void printPacket(const char const * packet) 
 {
     printWrap(packet);
-    printWrap(packet+18);
+    printWrap(packet+17);
 }
 
 bool unWrapPacket(unsigned char *answers, const uint8_t nAnswers, char* nick, const char const * packet)
