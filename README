@@ -1,1 +1,22 @@
-We are r0ketmen, r0ketmen...
+okr0ket is a dating app for the r0ket platform
+
+you answer some questions and potential matches will show up on your r0ket.
+if the match score exceeds the threshold (of love) the red led will blink.
+
+## INSTALL ## 
+
+download the okr0ket.c0d and copy it onto your r0ket.
+select okr0ket in the execute folder and answer the questions.
+look around for potential mates.
+
+##
+
+After that the r0ket will broadcast your answers and receive 
+others answers. Other's usernames will show up along with their
+matching score on the display. If you are interested in the match 
+it is your task to find the owner of the r0ket in question.
+
+happy dating
+
+0xtob, buck
+
