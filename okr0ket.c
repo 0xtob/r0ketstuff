@@ -60,7 +60,7 @@ void ram(void)
     showSplashScreen();
 
     lcdClear();
-    uint8_t nQuestions = 16;
+    uint8_t nQuestions = 13;
     struct Question q[nQuestions];
     unsigned char answers[nQuestions];
     char answerfile[] = "okr0ket.prf";
@@ -324,8 +324,8 @@ void initQuestions(struct Question* const questions)
     questions[0].down="XY";
     
     questions[1].text="Gayness?";
-    questions[1].up  ="Low";
-    questions[1].down="High";
+    questions[1].up  ="Low (Hetero)";
+    questions[1].down="High (Homo)";
 
     questions[2].text="Favorite #?";
     questions[2].up  ="23";
@@ -359,29 +359,17 @@ void initQuestions(struct Question* const questions)
     questions[9].up  ="Alive!";
     questions[9].down="Dead!";
     
-    questions[10].text="German?";
-    questions[10].up  ="Sure!";
-    questions[10].down="Nein!";
+    questions[10].text="My Editor?";
+    questions[10].up  ="vi";
+    questions[10].down="emacs";
 
-    questions[11].text="Star ...";
-    questions[11].up  ="Trek";
-    questions[11].down="Wars";
+    questions[11].text="In emergency?";
+    questions[11].up  ="Run!";
+    questions[11].down="Observe";
 
-    questions[12].text="Drink?";
-    questions[12].up  ="Booze";
-    questions[12].down="Own piss";
-
-    questions[13].text="My Editor?";
-    questions[13].up  ="vi";
-    questions[13].down="emacs";
-
-    questions[14].text="In emergency?";
-    questions[14].up  ="Run!";
-    questions[14].down="Observe";
-
-    questions[15].text="Grammar";
-    questions[15].up  ="Nazi";
-    questions[15].down="Hippie";
+    questions[12].text="Grammar";
+    questions[12].up  ="Nazi";
+    questions[12].down="Hippie";
 }
 
 void showQuestion(const struct Question const * q, const uint8_t idx) 
