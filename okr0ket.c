@@ -105,7 +105,7 @@ void ram(void)
         blinkLed(1); // Blink top left LED
         char* packet_recv;
         if(recv_msg((unsigned char**)&packet_recv)) {
-            //blinkLed(0);
+            blinkLed(3);
             //printPacket(packet_recv);
             // decode message
             char recv_nick[17];
@@ -116,7 +116,7 @@ void ram(void)
 
                 // match against my profile
                 uint8_t score = match(answers, recv_answers, nQuestions);
-                uint8_t score_p = 100*score/(nQuestions-2);
+                uint8_t score_p = (100*score)/(nQuestions-2);
 
                 // Blink the red LED if we have a >= 80% match
                 if(score_p >= 80) {
@@ -124,10 +124,14 @@ void ram(void)
                 }
 
                 // display!
+                recv_nick[9] = 0;
                 lcdPrint(recv_nick);
                 lcdPrint(" ");
                 lcdPrint(IntToStr(score_p, 3, 0));
                 lcdPrintln("%");
+                //lcdPrintln(IntToStr(score,2,0));
+                //printPacket(packet_send);
+                //printPacket(packet_recv);
             } else {
                 //lcdPrintln("cannot read");
             }
