@@ -194,7 +194,10 @@ void askQuestions(const struct Question const *q, uint8_t nQuestions,
 uint8_t match(const unsigned char const * a1, const unsigned char const * a2, const uint8_t n) 
 {
     uint8_t score = 0;
-    for (uint8_t i=0; i<n; ++i) {
+    if (a1[0] == a2[0] && (a1[1] != 1 || a2[1] != 1) ) {
+        return 0;
+    }
+    for (uint8_t i=2; i<n; ++i) {
         if (a1[i]==a2[i]) 
             score++;
     }
