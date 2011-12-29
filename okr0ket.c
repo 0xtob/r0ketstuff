@@ -5,6 +5,7 @@
 
 #include "basic/basic.h"
 #include "basic/config.h"
+#include "basic/random.h"
 
 #include "filesystem/ff.h"
 
@@ -299,7 +300,8 @@ void printWrap(const char const * s)
 uint8_t recv_msg(unsigned char **msg)
 {
     nrf_config_set(&config);
-    int n = nrf_rcv_pkt_time(400,32,recvbuf);
+    uint32_t delay = 200 + (getRandom() & 0x01ff);
+    int n = nrf_rcv_pkt_time(delay, 32, recvbuf);
     if(n != 32)
         return 0;
     *msg = recvbuf;
