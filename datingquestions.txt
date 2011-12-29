@@ -1,3 +1,12 @@
+chromosomes
+XX XY
+
+Gayness
+low, high
+
+my data
+encrypted, spackeria 
+
 favorite editor
 vi, emacs
 
@@ -12,3 +21,5 @@ yes, no
 
 spicy food
 too hot, bring on the pain!
+
+
